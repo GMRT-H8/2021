@@ -16,11 +16,31 @@ Servo myservo3;
 int player = 0;
 int battery = 0;
 
+byte encAlastleft;
+int durationleft;
+bool dirleft;
+// variables for RPM
+//static unsigned long now, lastTime, lastTime2;
+int counterleft;
+//int currentPos, lastPos;
+//long RPM;
+
+byte encAlastright;
+int durationright;
+bool dirright;
+// variables for RPM
+//static unsigned long now, lastTime, lastTime2;
+int counterright;
+//int currentPos, lastPos;
+//long RPM;
+
+double rightinput, leftinput;
+
 // define pin encoder
-const byte leftencoderA = 6;
-const byte leftencoderB = 7;
-const byte rightencoderA = 3;
-const byte rightencoderB = 4;
+const byte leftencoderA = 16;
+const byte leftencoderB = 4;
+const byte rightencoderA = 2;
+const byte rightencoderB = 15;
 
 // define pin IBT motor driver
 const byte ML_A = 32;
@@ -35,7 +55,8 @@ const byte servoPin3 = 13;
 
 static int flagxservo90;
 
-static int velocitymotor; 
+int velocitymotorright;
+int velocitymotorleft; 
 // static int RPMmotor;
 
 void onConnect(){
@@ -52,8 +73,9 @@ void setup()
     initservo();
     //leftinitRPM();
     //rightinitRPM();
-
-    velocitymotor = 80;
+    flagxservo90 = 0;
+    velocitymotorright = 82;;
+    velocitymotorleft = 78;
 }
 
 void loop()
@@ -61,4 +83,6 @@ void loop()
     if(!Ps3.isConnected())
         return;
     eventPS3Controller();
+    //rightinput = rightRPM();
+    //leftinput = leftRPM();
 }
