@@ -1,22 +1,3 @@
-//variables for encoder
-byte encAlastleft;
-int durationleft;
-bool dirleft;
-// variables for RPM
-//static unsigned long now, lastTime, lastTime2;
-int counterleft;
-//int currentPos, lastPos;
-//long RPM;
-
-byte encAlastright;
-int durationright;
-bool dirright;
-// variables for RPM
-//static unsigned long now, lastTime, lastTime2;
-int counterright;
-//int currentPos, lastPos;
-//long RPM;
-
 void leftinitRPM(){
   pinMode(leftencoderA, INPUT);
   pinMode(leftencoderB, INPUT);
@@ -32,7 +13,7 @@ void rightinitRPM(){
 int leftRPM(){
   static unsigned long now, then, then2;
   static int currentPos, lastPos;
-  long RPM;
+  static long RPM;
   now = millis();
   if(now-then >= 100){
     currentPos = counterleft;
@@ -40,7 +21,7 @@ int leftRPM(){
     lastPos = currentPos;
     then = now;
   }
-  if((now-then2)>=500){
+  if((now-then2)>=1000){
     Serial.print("Currrent RPM:");
     Serial.println(RPM);
     Serial.print("pulse:");
@@ -55,7 +36,7 @@ int leftRPM(){
 int rightRPM(){
   static unsigned long now, then, then2;
   static int currentPos, lastPos;
-  long RPM;
+  static int RPM;
   now = millis();
   if(now-then >= 100){
     currentPos = counterright;
@@ -63,7 +44,7 @@ int rightRPM(){
     lastPos = currentPos;
     then = now;
   }
-  if((now-then2)>=500){
+  if((now-then2)>=1000){
     Serial.print("Currrent RPM:");
     Serial.println(RPM);
     Serial.print("pulse:");
@@ -74,7 +55,6 @@ int rightRPM(){
   }
   return RPM;
 }
-
 
 void leftwheelPulse(){
 
