@@ -16,46 +16,40 @@ void initPS3Controller(){
 void eventPS3Controller(){
     // move servo
     // tombol segitiga vertikal servo CW
-    if( Ps3.event.button_down.triangle ){
-        //Serial.println("Started pressing the triangle button");
-        //Serial.println("servo vertikal ke atas");                
-        servo1cont(false,2); 
-        delay(5);
+    if( Ps3.event.button_down.triangle){              
+      servo1cont(false,2);
+      delayMicroseconds(5);
     }
-    
-    if( Ps3.event.button_up.triangle ){
-        //Serial.println("Released the triangle button");
-        //Serial.println("servo vertikal stop");    
-        servo1stop();
-        delay(5);
+    if( Ps3.event.button_up.triangle){
+      //Serial.println("Released the triangle button");
+      //Serial.println("servo vertikal stop"); 
+      servo1stop();
+      delayMicroseconds(5);
     }
-
     // tombol x servo vertikal CCW
     if( Ps3.event.button_down.cross ){
         //Serial.println("Started pressing the cross button");
         //delay(250);
         //Serial.println("servo vertikal turun");
-        
         servo1cont(true,2);
-        delay(5);
+        delayMicroseconds(5);
     }
     if( Ps3.event.button_up.cross ){
         //Serial.println("servo stop");
         servo1stop();
-        delay(5);
+        delayMicroseconds(5);
     }
-
     
     // tombol kotak for servo horizontal buka
     if( Ps3.event.button_down.square ){
         //Serial.println("servo horizontal ke buka");
         servo2cont(false,2);
-        delay(5);
+        delayMicroseconds(5);
     }
     if( Ps3.event.button_up.square ){
         //Serial.println("servo horizontal stop");
         servo2stop();
-        delay(5);
+        delayMicroseconds(5);
     }
     
     // tombol bulet for servo horizontal tutup
@@ -63,50 +57,48 @@ void eventPS3Controller(){
         //Serial.println("servo horizontal ke tutup");
         
         servo2cont(true,2);
-        delay(5);
+        delayMicroseconds(5);
     }
     if( Ps3.event.button_up.circle ){
         //Serial.println("servo horizontal stop");
         
         servo2stop();
-        delay(5);
+        delayMicroseconds(5);
     }
 
     // tombol pad kanan for servo90
     if( Ps3.event.button_down.right ){
-        //Serial.println("Started pressing the right button");
-        if(flagxservo90==0){
-          //Serial.println("servo 90 derajat, flagservo:");
-          //Serial.print(flagxservo90);
+      if(flagxservo90==0){
+        Serial.print("servo 90 derajat, flagservo:");
+        Serial.println(flagxservo90);
           
-          myservo3.write(170);
-          flagxservo90=1;
-          //delay(250);
-        }
-        else if(flagxservo90==1){
-          //Serial.println("servo 0 derajat, flagservo:");
-          //Serial.print(flagxservo90);
-          
-          myservo3.write(0);
-          flagxservo90=0;
-        }
-        delay(100);
+        myservo3.write(180);
+        flagxservo90=1;
+        //delay(250);
+      }
+      else if(flagxservo90==1){
+        Serial.print("servo 0 derajat, flagservo:");
+        Serial.println(flagxservo90);
+        
+        myservo3.write(0);
+        flagxservo90=0;
+      }
+      delay(5);
     }
     if( Ps3.event.button_up.right ){
-        //Serial.println("Released the right button");
-        delay(5);
+      //Serial.println("Released the right button");
+      delayMicroseconds(5);
     }
 
     // tombol atas bawah buat atur speed motor
     // tombol atas for speed up
     if( Ps3.event.button_down.up ){
-        //Serial.println("Started pressing the right button");
-        velocitymotor = velocitymotor + 20;
-        if(velocitymotor>80){
-          velocitymotor = 80;
-        }
-        
-        delay(5);
+      //Serial.println("Started pressing the right button");
+      velocitymotorright = velocitymotorright + 20;
+      if(velocitymotorright>80){
+        velocitymotorright = 80;
+      }
+      delayMicroseconds(5);
     }
     if( Ps3.event.button_up.up ){
         //Serial.println("Released the right button");
@@ -117,15 +109,15 @@ void eventPS3Controller(){
         //Serial.println("Started pressing the right button");
         //speeddown(velocityright);
         //speeddown(velocityleft);
-        velocitymotor = velocitymotor - 20;
-        if(velocitymotor<0){
-          velocitymotor = 0;
+        velocitymotorright = velocitymotorright - 20;
+        if(velocitymotorright<0){
+          velocitymotorright = 0;
         }
-        delay(5);
+        delayMicroseconds(5);
     }
     if( Ps3.event.button_up.down ){
         //Serial.println("Released the right button");
-        delay(5);
+        delayMicroseconds(5);
     }
     
     // L1,R1,L2,R2 for move robot
@@ -135,7 +127,7 @@ void eventPS3Controller(){
         //Serial.print("speed:");
         //Serial.println(velocitymotor);
         
-        motorleft(true, velocitymotor);
+        motorleft(true, velocitymotorleft);
         //delay(100);
     }
     if( Ps3.event.button_up.l1 ){
@@ -147,7 +139,7 @@ void eventPS3Controller(){
         //Serial.println("motor kanan CW");
         //Serial.print("speed:");
         //Serial.println(velocitymotor);
-        motorright(true, velocitymotor);
+        motorright(true, velocitymotorright);
         //delay(100);
     }
     if( Ps3.event.button_up.r1 ){
@@ -160,7 +152,7 @@ void eventPS3Controller(){
         //Serial.println("motor kiri CCW");
         //Serial.print("speed:");
         //Serial.println(velocitymotor);
-        motorleft(false,velocitymotor);
+        motorleft(false,velocitymotorleft);
         //delay(100);
     }
     if( Ps3.event.button_up.l2 ){
@@ -172,7 +164,7 @@ void eventPS3Controller(){
         //Serial.println("motor kanan CCW");
         //Serial.print("speed:");
         //Serial.println(velocitymotor);
-        motorright(false,velocitymotor);
+        motorright(false,velocitymotorright);
         //delay(100);
     }
     if( Ps3.event.button_up.r2 ){
