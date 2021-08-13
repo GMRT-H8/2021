@@ -121,73 +121,67 @@ void eventPS3Controller(){
     }
     // tombol bawah for speed down
     if( Ps3.event.button_down.down ){
-        //Serial.println("Started pressing the right button");
-        //speeddown(velocityright);
-        //speeddown(velocityleft);
-        velocitymotor = velocitymotor - 20;
-        if(velocitymotor<0){
-          velocitymotor = 0;
-        }
-        delay(50);
+      //Serial.println("Started pressing the right button");
+      //speeddown(velocityright);
+      //speeddown(velocityleft);
+      velocitymotor = velocitymotor - 20;
+      if(velocitymotor<0){
+        velocitymotor = 0;
+      }
+      delay(50);
     }
     if( Ps3.event.button_up.down ){
-        Serial.println("Released the right button");
-        delay(50);
+      Serial.println("Released the right button");
+      delay(50);
     }
     
     // L1,R1,L2,R2 for move robot
-    // tombol R1,L1
-    if( Ps3.event.button_down.l1 ){
-        Serial.println("motor kiri CW");
-        Serial.print("speed:");
-        
-        
-        Serial.println(velocitymotor);
-        
-        ctrl_motorleft(true, velocitymotor);
-        //delay(100);
-    }
-    if( Ps3.event.button_up.l1 ){
-        Serial.println("motor kiri stop");
-        motorleft(true, 0);
-        //delay(100);
-    }
-    if( Ps3.event.button_down.r1 ){
-        Serial.println("motor kanan CW");
-        Serial.print("speed:");
-        Serial.println(velocitymotor);
-        ctrl_motorright(true, velocitymotor);
-        //delay(100);
+    // tombol R1,R2
+    if( Ps3.event.button_down.r1 ){  
+      flagdirectright = true;
+      rightact = true;
     }
     if( Ps3.event.button_up.r1 ){
-        Serial.println("motor kanan stop");
-        motorright(false, 0);
-        //delay(100);
-    }
-    // tombol R2,L2
-    if( Ps3.event.button_down.l2 ){
-        Serial.println("motor kiri CCW");
-        Serial.print("speed:");
-        Serial.println(velocitymotor);
-        ctrl_motorleft(false,velocitymotor);
-        //delay(100);
-    }
-    if( Ps3.event.button_up.l2 ){
-        Serial.println("motor kiri stop");
-        motorleft(false,0);
-        //delay(100);
+      rightact = false;
     }
     if( Ps3.event.button_down.r2 ){
-        Serial.println("motor kanan CCW");
-        Serial.print("speed:");
-        Serial.println(velocitymotor);
-        ctrl_motorright(false,velocitymotor);
-        //delay(100);
+      flagdirectright = false;
     }
     if( Ps3.event.button_up.r2 ){
-        Serial.println("motor kanan stop");
-        motorright(false,0);
-        //delay(100);
+      rightact = false;
+    }
+    if(rightact && flagdirectright){
+      motorright(true, rightoutput);
+    }
+    if(rightact && !flagdirectright){
+      motorright(false, rightoutput);
+    }
+    if(!rightact){
+      motorright(true, 0);    
+    }
+    // tombol L1,L2
+    if( Ps3.event.button_down.l1 ){
+      flagdirectright = true;
+      rightact = true;
+    }
+    if( Ps3.event.button_up.l1 ){
+      rightact = false;
+    }
+    if( Ps3.event.button_down.l2 ){
+      flagdirectright = false;
+      rightact = true;
+    }
+    if( Ps3.event.button_up.l2 ){
+      rightact = false;
+    }
+    if(leftact && flagdirectleft){
+      motorleft(true, leftoutput);
+    }
+    if(leftact && !flagdirectleft){
+      motorleft(false, leftoutput);
+    }
+    if(!leftact){
+      motorleft(true, 0);    
     }
 }
 
