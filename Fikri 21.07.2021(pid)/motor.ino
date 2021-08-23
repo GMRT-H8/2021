@@ -35,14 +35,16 @@ void initmotorleft(){
 }
 
 void motorright(bool direct, int velocity){
+  //Serial.println("nilai PWM:");
+  //Serial.println(rightoutput);
   if(direct){
-    Serial.println("Motor Right CW");
+    //Serial.println("Motor Right CW");
     ledcWrite(4, velocity);
     ledcWrite(5, 0);
   }
   if(!direct){
     //MyPIDleft.();
-    Serial.println("Motor Right CCW");  
+    //Serial.println("Motor Right CCW");  
     ledcWrite(4, 0);
     ledcWrite(5, velocity);
   }
@@ -50,12 +52,12 @@ void motorright(bool direct, int velocity){
 
 void motorleft(bool direct, int velocity){
   if(direct){
-    Serial.println("Motor Left CW");
+    //Serial.println("Motor Left CW");
     ledcWrite(2, velocity);
     ledcWrite(3, 0); 
   }
   if(!direct){
-    Serial.println("Motor Left CCW");
+    //Serial.println("Motor Left CCW");
     ledcWrite(2, 0);
     ledcWrite(3, velocity);  
   }
@@ -90,37 +92,51 @@ void initctrlmotorright(){
   
   Serial.println("Rigth motor is ready to use");
 }
+void initctrlmotorleft(){
+  // initialize pin mode
+  // initialize pwm
+  //ledcSetup(ledChannel, freq, resolution);
+  ledcSetup(4, 5000, 8);
+  ledcSetup(5, 5000, 8);
+  
+  // attach the channel to the GPIO to be controlled
+  ledcAttachPin(MR_A, 4);
+  ledcAttachPin(MR_B, 5);
+
+  MyPIDleft.SetMode(AUTOMATIC);
+  
+  Serial.println("Rigth motor is ready to use");
+}
 
 
-void ctrl_motorright(bool direct, long setpoint){
+void ctrl_motorright(long setpoint){
+    //Serial.println("XXX");
     
-    if(direct){
+    if(flagdirectright){
       MyPIDright.SetControllerDirection(DIRECT);
       rightsetpoint = setpoint;
       MyPIDright.Compute();
-      motorright(true, rightoutput);
     }
     
-    if(!direct){
+    if(!flagdirectright){
       MyPIDright.SetControllerDirection(REVERSE);
-      rightsetpoint = setpoint;
+      rightsetpoint = -setpoint;
       MyPIDright.Compute();
-      motorright(false, rightoutput);
     }
 }
-void ctrl_motorleft(bool direct, long setpoint){
+
+void ctrl_motorleft(long setpoint){
+    //Serial.println("YYY");
     
-    if(direct){
+    if(flagdirectleft){
       MyPIDleft.SetControllerDirection(DIRECT);
       leftsetpoint = setpoint;
       MyPIDleft.Compute();
-      motorleft(true, leftoutput);
     }
     
-    if(!direct){
+    if(!flagdirectleft){
       MyPIDleft.SetControllerDirection(REVERSE);
-      leftsetpoint = setpoint;
+      leftsetpoint = -setpoint;
       MyPIDleft.Compute();
-      motorleft(false, leftoutput);
     }
 }
