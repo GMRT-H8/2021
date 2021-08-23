@@ -146,10 +146,12 @@ void eventPS3Controller(){
     }
     if( Ps3.event.button_down.r2 ){
       flagdirectright = false;
+      rightact=true;
     }
     if( Ps3.event.button_up.r2 ){
       rightact = false;
     }
+    
     if(rightact && flagdirectright){
       motorright(true, rightoutput);
     }
@@ -159,21 +161,23 @@ void eventPS3Controller(){
     if(!rightact){
       motorright(true, 0);    
     }
+    
     // tombol L1,L2
     if( Ps3.event.button_down.l1 ){
-      flagdirectright = true;
-      rightact = true;
+      flagdirectleft = true;
+      leftact = true;
     }
     if( Ps3.event.button_up.l1 ){
-      rightact = false;
+      leftact = false;
     }
     if( Ps3.event.button_down.l2 ){
-      flagdirectright = false;
-      rightact = true;
+      flagdirectleft = false;
+      leftact = true;
     }
     if( Ps3.event.button_up.l2 ){
-      rightact = false;
+      leftact = false;
     }
+    
     if(leftact && flagdirectleft){
       motorleft(true, leftoutput);
     }
@@ -183,6 +187,7 @@ void eventPS3Controller(){
     if(!leftact){
       motorleft(true, 0);    
     }
+    
 }
 
 void notify()
