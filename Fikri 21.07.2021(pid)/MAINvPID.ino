@@ -2,6 +2,7 @@
 #include <ESP32Servo.h>
 #include <PID_v1.h>
 
+
 Servo myservo1;
 Servo myservo2;
 Servo myservo3;
@@ -11,15 +12,15 @@ int battery = 0;
 /*berikut adalah panduan penggunaan pin yang benar dari kedua board (Ardan & Rizal)
   Board Ardan:
     //pin encoder
-    leftencoderA = 2
-    leftencoderB = 15
-    rightencoderA = 4
-    rightencoderB = 16
+    leftencoderA = 4
+    leftencoderB = 16
+    rightencoderA = 2
+    rightencoderB = 15
     //pin motor
-    MR_A = 33
-    MR_B = 32
-    ML_A = 27
-    ML_B = 25
+    MR_A = 25
+    MR_B = 27
+    ML_A = 33
+    ML_B = 32
     //pin servo
     servoPin1 = 14
     servoPin2 = 12
@@ -39,15 +40,15 @@ int battery = 0;
     servoPin2 = 14
     servoPin3 = 12
 */
-const byte leftencoderA = 2;
-const byte leftencoderB = 15;
-const byte rightencoderA = 4;
-const byte rightencoderB = 16;
+const byte leftencoderA = 4;
+const byte leftencoderB = 16;
+const byte rightencoderA = 2;
+const byte rightencoderB = 15;
 
-const byte ML_A = 27;
-const byte ML_B = 25;
-const byte MR_A = 33;
-const byte MR_B = 32;
+const byte ML_A = 33;
+const byte ML_B = 32;
+const byte MR_A = 25;
+const byte MR_B = 27;
 
 
 const byte servoPin1 = 14;
@@ -58,10 +59,8 @@ static int flagxservo;
 static int flagxservo90;
 
 static int velocitymotor; 
-static double RPMmotor;
 
 byte encAlastleft;
-int durationleft;
 bool dirleft;
 // variables for RPM
 //static unsigned long now, lastTime, lastTime2;
@@ -70,7 +69,6 @@ int counterleft;
 //long RPM;
 
 byte encAlastright;
-int durationright;
 bool dirright;
 // variables for RPM
 //static unsigned long now, lastTime, lastTime2;
@@ -85,20 +83,22 @@ bool rightact;
 bool leftact;
 // left motor PID variables
 double leftsetpoint, leftinput, leftoutput;
-double leftKp=0.68213;
-double leftKi=2.4925;
-double leftKd=0;
+double leftKp= 0.32755; //0.68213;
+double leftKi= 4.6454; //2.4925;
+double leftKd= 0;
 
 // right motor PID variables
 double rightsetpoint, rightinput, rightoutput;
-double rightKp = 0.68213;
-double rightKi = 2.4925;
+double rightKp = 0.32755;
+double rightKi = 4.6454;
 double rightKd = 0;
 
 PID MyPIDleft(&leftinput, &leftoutput, &leftsetpoint, leftKp, leftKi, leftKd, DIRECT);
 PID MyPIDright(&rightinput, &rightoutput, &rightsetpoint, rightKp, rightKi, rightKd, DIRECT);
 
 unsigned long past;
+int toggle;
+
 
 void onConnect(){
     Serial.println("Connected.");
@@ -119,8 +119,8 @@ void setup()
     leftinitRPM();
     rightact = false;
     leftact = false;
-    RPMmotor = 60;
-    velocitymotor = 110;
+    velocitymotor = 100;
+    toggle=1;
 }
 
 void loop()
@@ -132,14 +132,14 @@ void loop()
     leftinput = leftRPM();
     ctrl_motorright(velocitymotor);
     ctrl_motorleft(velocitymotor);
+    //speedMode(toggle, 100, 300);
     /*
-    if(millis()-past>=500){
-      Serial.print("left output: ");
-      Serial.println(leftoutput);
-      Serial.print("right output: ");
-      Serial.println(rightoutput);
-      
+    if(millis()-past>=1000){
+      Serial.print("velocity motor: ");
+      Serial.println(velocitymotor);
+      Serial.print("toggle motor: ");
+      Serial.println(toggle);
+      past=millis();
     }
     */
-    
 }
