@@ -86,7 +86,7 @@ void eventPS3Controller(){
           Serial.println("servo 90 derajat, flagservo:");
           Serial.print(flagxservo90);
           
-          myservo3.write(170);
+          myservo3.write(180);
           flagxservo90=1;
           //delay(250);
         }
@@ -108,15 +108,15 @@ void eventPS3Controller(){
     // tombol atas for speed up
     if( Ps3.event.button_down.up ){
         //Serial.println("Started pressing the right button");
-        velocitymotor = velocitymotor + 20;
-        if(velocitymotor>80){
-          velocitymotor = 80;
+        velocitymotor = velocitymotor + 100;
+        if(velocitymotor>350){
+          velocitymotor = 350;
         }
         
         delay(50);
     }
     if( Ps3.event.button_up.up ){
-        Serial.println("Released the right button");
+        //Serial.println("Released the right button");
         delay(50);
     }
     // tombol bawah for speed down
@@ -124,70 +124,89 @@ void eventPS3Controller(){
       //Serial.println("Started pressing the right button");
       //speeddown(velocityright);
       //speeddown(velocityleft);
-      velocitymotor = velocitymotor - 20;
-      if(velocitymotor<0){
-        velocitymotor = 0;
+      velocitymotor = velocitymotor - 100;
+      if(velocitymotor<80){
+        velocitymotor = 80;
       }
       delay(50);
     }
     if( Ps3.event.button_up.down ){
-      Serial.println("Released the right button");
+      //Serial.println("Released the right button");
       delay(50);
     }
     
+    if( Ps3.event.button_down.left ){
+      //Serial.println("Started pressing the right button");
+      if(toggle==0){
+        toggle=1;
+      }
+      else if(toggle==1){
+        toggle=0;
+      }
+      delay(50);
+    }
+    if( Ps3.event.button_up.left ){
+      //Serial.println("Released the right button");
+      delay(50);
+    }
     // L1,R1,L2,R2 for move robot
     // tombol R1,R2
+    // buat motor kiri
     if( Ps3.event.button_down.r1 ){  
-      flagdirectright = true;
-      rightact = true;
-    }
-    if( Ps3.event.button_up.r1 ){
-      rightact = false;
-    }
-    if( Ps3.event.button_down.r2 ){
-      flagdirectright = false;
-      rightact=true;
-    }
-    if( Ps3.event.button_up.r2 ){
-      rightact = false;
-    }
-    
-    if(rightact && flagdirectright){
-      motorright(true, rightoutput);
-    }
-    if(rightact && !flagdirectright){
-      motorright(false, rightoutput);
-    }
-    if(!rightact){
-      motorright(true, 0);    
-    }
-    
-    // tombol L1,L2
-    if( Ps3.event.button_down.l1 ){
       flagdirectleft = true;
       leftact = true;
     }
-    if( Ps3.event.button_up.l1 ){
+    if( Ps3.event.button_up.r1 ){
       leftact = false;
     }
-    if( Ps3.event.button_down.l2 ){
+    if( Ps3.event.button_down.r2 ){
       flagdirectleft = false;
-      leftact = true;
+      leftact=true;
     }
-    if( Ps3.event.button_up.l2 ){
+    if( Ps3.event.button_up.r2 ){
       leftact = false;
     }
     
     if(leftact && flagdirectleft){
       motorleft(true, leftoutput);
+      //motorleft(true, 80);
     }
     if(leftact && !flagdirectleft){
       motorleft(false, leftoutput);
+      //motorleft(false, 80);
     }
     if(!leftact){
       motorleft(true, 0);    
     }
     
+    // tombol L1,L2
+    // buat motor kanan
+    if( Ps3.event.button_down.l1 ){
+      flagdirectright = true;
+      rightact = true;
+    }
+    if( Ps3.event.button_up.l1 ){
+      rightact = false;
+    }
+    if( Ps3.event.button_down.l2 ){
+      flagdirectright = false;
+      rightact = true;
+    }
+    if( Ps3.event.button_up.l2 ){
+      rightact = false;
+    }
+
+    if(rightact && flagdirectright){
+      motorright(true, rightoutput);
+      //motorright(true, 80);
+    }
+    if(rightact && !flagdirectright){
+      //motorright(false, 80);
+      motorright(false, rightoutput);
+    }
+    if(!rightact){
+      motorright(true, 0);    
+    }
 }
 
 void notify()
