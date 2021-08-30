@@ -96,12 +96,12 @@ void initctrlmotorleft(){
   // initialize pin mode
   // initialize pwm
   //ledcSetup(ledChannel, freq, resolution);
-  ledcSetup(4, 5000, 8);
-  ledcSetup(5, 5000, 8);
+  ledcSetup(2, 5000, 8);
+  ledcSetup(3, 5000, 8);
   
   // attach the channel to the GPIO to be controlled
-  ledcAttachPin(MR_A, 4);
-  ledcAttachPin(MR_B, 5);
+  ledcAttachPin(ML_A, 2);
+  ledcAttachPin(ML_B, 3);
 
   MyPIDleft.SetMode(AUTOMATIC);
   
@@ -139,4 +139,25 @@ void ctrl_motorleft(long setpoint){
       leftsetpoint = -setpoint;
       MyPIDleft.Compute();
     }
+}
+
+void speedMode(int toggle, int lowspeed, int highspeed){
+  static unsigned long now, then, timing;
+  now = millis();
+  timing = now-then;
+  Serial.print(timing);
+  if(toggle==0){
+    velocitymotor = lowspeed;
+  }
+  else if(toggle==1){
+    if(now-then>8000){
+      if(now-then<2000){
+        velocitymotor = highspeed;
+      }
+      else if(now-then>=2000){
+        velocitymotor = lowspeed;
+      }
+      then=now;
+    }
+  }
 }
