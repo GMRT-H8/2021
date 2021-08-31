@@ -16,9 +16,9 @@ int leftRPM(){
   static int lastPos = 0;
   static long RPM = 0;
   now = millis();
-  if(now-then >= 100){
+  if(now-then >= 25){
     currentPos = counterleft;
-    RPM = (currentPos-lastPos)*0.7352941176470588;
+    RPM = (currentPos-lastPos)*0.7352941176470588*4;
     lastPos = currentPos;
     then = now;
   }
@@ -27,14 +27,14 @@ int leftRPM(){
     Serial.print("Currrent RPM:");
     Serial.println(RPM);
     Serial.print("pulse:");
-    Serial.println(durationleft);
+    Serial.println(counterleft);
     //Serial.print("Currrent output:");
     //Serial.println(output);
     then2 = now;
   }
-  
-  return RPM;
   */
+  return RPM;
+  
 }
 
 int rightRPM(){
@@ -43,9 +43,9 @@ int rightRPM(){
   static int lastPos = 0;
   static int RPM = 0;
   now = millis();
-  if(now-then >= 100){
+  if(now-then >= 25){
     currentPos = counterright;
-    RPM = (currentPos-lastPos)*0.7352941176470588;
+    RPM = (currentPos-lastPos)*0.7352941176470588*4;
     lastPos = currentPos;
     then = now;
   }
@@ -77,9 +77,8 @@ void leftwheelPulse(){
   }
   encAlastleft = lastState;
 
-  if(!dirleft) durationleft++;
-  else durationleft--;
-  counterleft = durationleft;
+  if(!dirleft) counterleft++;
+  else counterleft--;
  
 }
 
@@ -97,8 +96,7 @@ void rightwheelPulse(){
   }
   encAlastright = lastState;
 
-  if(!dirright) durationright++;
-  else durationright--;
-  counterright = durationright;
+  if(!dirright) counterright++;
+  else counterright--;
  
 }
