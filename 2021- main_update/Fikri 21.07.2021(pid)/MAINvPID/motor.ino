@@ -170,10 +170,10 @@ void Speedhaha (bool saklar, int lowspeed, int highspeed){
   timing = now - then;
   if (saklar == true){
     if(timing<8000){
-      if(timing<2000){
+      if(timing<3000){
         flagspeed=true;
       }
-      if(timing>2000){
+      if(timing>3000){
         flagspeed=false;
       }
     }
