@@ -1,4 +1,3 @@
-
 void initPS3Controller(){
   //Ps3.attach(notify);
     Ps3.attachOnConnect(onConnect);
@@ -34,16 +33,14 @@ void eventPS3Controller(){
     if( Ps3.event.button_down.cross ){
         //Serial.println("Started pressing the cross button");
         //delay(250);
-        Serial.println("servo vertikal turun");
-        
+        Serial.println("servo vertikal turun");       
         servo1cont(true,2);
         delayMicroseconds(50);
     }
     if( Ps3.event.button_up.cross ){
         //Serial.println("Released the cross button");
         //servo2stop();
-        Serial.println("servo stop");
-        
+        Serial.println("servo stop");     
         servo1stop();
         delayMicroseconds(50);
     }
@@ -65,8 +62,7 @@ void eventPS3Controller(){
     // tombol bulet for servo horizontal tutup
     if( Ps3.event.button_down.circle ){
         //Serial.println("Started pressing the circle button");
-        Serial.println("servo horizontal ke tutup");
-        
+        Serial.println("servo horizontal ke tutup");   
         servo2cont(true,2);
         delayMicroseconds(50);
     }
@@ -74,7 +70,6 @@ void eventPS3Controller(){
         //Serial.println("Released the circle button");
         //delay(250);
         Serial.println("servo horizontal stop");
-        
         servo2stop();
         delayMicroseconds(50);
     }
@@ -107,17 +102,12 @@ void eventPS3Controller(){
     // tombol atas bawah buat atur speed motor
     // tombol atas for speed up
     if( Ps3.event.button_down.up ){
-        //Serial.println("Started pressing the right button");
-        velocitymotor = velocitymotor + 100;
-        if(velocitymotor>350){
-          velocitymotor = 350;
-        }
-        
-        delay(50);
+      toggle = true;
+      delayMicroseconds(50);
     }
     if( Ps3.event.button_up.up ){
-        //Serial.println("Released the right button");
-        delay(50);
+      toggle = false;
+      delayMicroseconds(50);
     }
     // tombol bawah for speed down
     if( Ps3.event.button_down.down ){
@@ -137,19 +127,9 @@ void eventPS3Controller(){
     
     if( Ps3.event.button_down.left ){
       //Serial.println("Started pressing the right button");
-        if(flagtoggle==0){
-          toggle=0;
-          flagtoggle=1;
-        }
-        else if(flagtoggle==1){
-          toggle=1;
-          flagtoggle=0;
-        }
-      delayMicroseconds(50);
     }
     if( Ps3.event.button_up.left ){
       //Serial.println("Released the right button");
-      delay(50);
     }
     // L1,R1,L2,R2 for move robot
     // tombol R1,R2
@@ -199,12 +179,23 @@ void eventPS3Controller(){
     }
 
     if(rightact && flagdirectright){
-      motorright(true, rightoutput);
-      //motorright(true, 80);
+      if (leftact && !flagdirectleft) {
+         motorright (true, 255);
+         motorleft (false, 255);
     }
+      else {
+         motorright(true, rightoutput);
+      }
+   }
     if(rightact && !flagdirectright){
       //motorright(false, 80);
-      motorright(false, rightoutput);
+      if (leftact && flagdirectleft) {
+        motorright (false, 255);
+        motorleft (true, 255);
+   }
+      else {
+       motorright(false, rightoutput); 
+      }
     }
     if(!rightact){
       motorright(true, 0);    
