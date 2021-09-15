@@ -40,20 +40,20 @@ int battery = 0;
     servoPin2 = 14
     servoPin3 = 12
 */
-const byte leftencoderA = 17;
+const byte leftencoderA = 4;
 const byte leftencoderB = 16;
-const byte rightencoderA = 22;
-const byte rightencoderB = 23;
+const byte rightencoderA = 2;
+const byte rightencoderB = 15;
 
 const byte ML_A = 33;
 const byte ML_B = 32;
 const byte MR_A = 25;
-const byte MR_B = 26;
+const byte MR_B = 27;
 
 
-const byte servoPin1 = 27;
-const byte servoPin2 = 14;
-const byte servoPin3 = 12;
+const byte servoPin1 = 14;
+const byte servoPin2 = 12;
+const byte servoPin3 = 13;
 
 static int flagxservo;
 static int flagxservo90;
@@ -84,14 +84,14 @@ bool leftact;
 // left motor PID variables
 
 double leftsetpoint, leftinput, leftoutput;
-double leftKp= 0.0070163;//0.075188;
-double leftKi= 0.5613;//6.015;
+double leftKp= 0.075188;
+double leftKi= 6.015;
 double leftKd= 0;
 
 // right motor PID variables
 double rightsetpoint, rightinput, rightoutput;
-double rightKp = 0.0073843;//0.35042;
-double rightKi = 0.59075;//6.0395;
+double rightKp = 0.35042;
+double rightKi = 6.0395;
 double rightKd = 0;
 
 PID MyPIDleft(&leftinput, &leftoutput, &leftsetpoint, leftKp, leftKi, leftKd, DIRECT);
@@ -101,7 +101,7 @@ unsigned long past;
 
 bool flagspeed;
 bool toggle;
-bool flagtoggle;
+//bool flagtoggle;
 
 void onConnect(){
     Serial.println("Connected.");
@@ -123,8 +123,8 @@ void setup()
     rightact = false;
     leftact = false;
     velocitymotor = 100;
-    toggle = 0;
-    flagtoggle=0;
+    toggle = false;
+    //flagtoggle=0;
 }
 
 void loop()
@@ -141,9 +141,9 @@ void loop()
     
     if(millis()-past>=1000){
       Serial.print("speed: ");
-      Serial.println(rightinput);
-      Serial.print("left: ");
-      Serial.println(leftinput);
+      Serial.println(velocitymotor);
+      //Serial.print("left: ");
+      //Serial.println(leftinput);
       past=millis();
     }
 }
