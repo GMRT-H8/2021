@@ -16,45 +16,72 @@ void eventPS3Controller(){
     // move servo
     // tombol segitiga vertikal servo CW
     if( Ps3.event.button_down.triangle ){
-        //Serial.println("Started pressing the triangle button");
-        Serial.println("servo vertikal ke atas");                
-        servo1cont(false,2);
-        delayMicroseconds(50);
+      if(servomode){
+        if(servoact<4){
+          servoact++;
+        }
+      }
+      if(!servomode){
+        servo1cont(true,2);
+      }
+      delay(50);
     }
     
     if( Ps3.event.button_up.triangle ){
-        //Serial.println("Released the triangle button");
-        Serial.println("servo vertikal stop");    
+      if(!servomode){
         servo1stop();
-        delayMicroseconds(50);
+      }
     }
 
     // tombol x servo vertikal CCW
     if( Ps3.event.button_down.cross ){
-        //Serial.println("Started pressing the cross button");
-        //delay(250);
-        Serial.println("servo vertikal turun");       
-        servo1cont(true,2);
-        delayMicroseconds(50);
+      if(servomode){
+        if(servoact>1){
+          servoact--;
+        }
+      }
+      if(!servomode){
+        servo1cont(false,2);
+      }  
+      delay(50);
     }
     if( Ps3.event.button_up.cross ){
-        //Serial.println("Released the cross button");
-        //servo2stop();
-        Serial.println("servo stop");     
+      if(!servomode){
         servo1stop();
-        delayMicroseconds(50);
+      }
     }
-
+    
+    if(servomode){
+      if(servoact==4){
+        servo1pos(15, counterservo);
+        //delayMicroseconds(50);      
+      }
+      if(servoact==3){
+        servo1pos(12, counterservo);
+        //delayMicroseconds(50);
+      }
+      if(servoact==2){
+        servo1pos(8, counterservo);
+        //delayMicroseconds(50);
+      }
+      if(servoact==1){
+        servo1pos(1, counterservo);
+        //delayMicroseconds(50);
+      }
+      else{
+        servo1stop();
+      }
+}
     
     // tombol kotak for servo horizontal buka
     if( Ps3.event.button_down.square ){
         //Serial.println("Started pressing the square button");
-        Serial.println("servo horizontal ke buka");
+        //Serial.println("servo horizontal ke buka");
         servo2cont(false,2);
         delayMicroseconds(50);
     }
     if( Ps3.event.button_up.square ){
-        Serial.println("servo horizontal stop");
+        //Serial.println("servo horizontal stop");
         servo2stop();
         delayMicroseconds(50);
     }
@@ -62,40 +89,34 @@ void eventPS3Controller(){
     // tombol bulet for servo horizontal tutup
     if( Ps3.event.button_down.circle ){
         //Serial.println("Started pressing the circle button");
-        Serial.println("servo horizontal ke tutup");   
+        //Serial.println("servo horizontal ke tutup");   
         servo2cont(true,2);
         delayMicroseconds(50);
     }
     if( Ps3.event.button_up.circle ){
         //Serial.println("Released the circle button");
         //delay(250);
-        Serial.println("servo horizontal stop");
+        //Serial.println("servo horizontal stop");
         servo2stop();
         delayMicroseconds(50);
     }
 
     // tombol pad kanan for servo90
     if( Ps3.event.button_down.right ){
-        //Serial.println("Started pressing the right button");
+      if(servomode == true && servoact>2){
         if(flagxservo90==0){
-          Serial.println("servo 90 derajat, flagservo:");
-          Serial.print(flagxservo90);
-          
-          myservo3.write(180);
+          myservo3.write(270);
           flagxservo90=1;
-          //delay(250);
         }
         else if(flagxservo90==1){
-          Serial.println("servo 0 derajat, flagservo:");
-          Serial.print(flagxservo90);
-          
           myservo3.write(0);
           flagxservo90=0;
         }
-        delay(50);
+      }
+      delay(50);
     }
     if( Ps3.event.button_up.right ){
-        Serial.println("Released the right button");
+        //Serial.println("Released the right button");
         delay(50);
     }
 
@@ -111,18 +132,11 @@ void eventPS3Controller(){
     }
     // tombol bawah for speed down
     if( Ps3.event.button_down.down ){
-      //Serial.println("Started pressing the right button");
-      //speeddown(velocityright);
-      //speeddown(velocityleft);
-      velocitymotor = velocitymotor - 100;
-      if(velocitymotor<80){
-        velocitymotor = 80;
-      }
-      delay(50);
+      
+      delayMicroseconds(50);
     }
     if( Ps3.event.button_up.down ){
-      //Serial.println("Released the right button");
-      delay(50);
+      delayMicroseconds(50);    
     }
     
     if( Ps3.event.button_down.left ){
@@ -200,6 +214,21 @@ void eventPS3Controller(){
     if(!rightact){
       motorright(true, 0);    
     }
+    
+    if( Ps3.event.button_down.select ){
+      if(servomode==true){
+        Ps3.setPlayer(2);
+        servomode = false;
+      }
+      else if(servomode == false){
+        Ps3.setPlayer(1);
+        servomode = true;
+      }
+      delay(50);
+    }
+    if( Ps3.event.button_up.select ){
+    
+    }
 }
 
 void notify()
@@ -252,7 +281,6 @@ void notify()
         Serial.println("Started pressing the left shoulder button");
     if( Ps3.event.button_up.l1 )
         Serial.println("Released the left shoulder button");
-
     if( Ps3.event.button_down.r1 )
         Serial.println("Started pressing the right shoulder button");
     if( Ps3.event.button_up.r1 )
