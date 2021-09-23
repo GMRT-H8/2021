@@ -1,3 +1,4 @@
+
 void initservo(){
     ESP32PWM::allocateTimer(0);
     ESP32PWM::allocateTimer(1);
@@ -26,17 +27,17 @@ void initservo(){
 // for CCW velocity 0,1,2,3 for 90,120,150,180
 void servo1cont(bool direct, int velocity){
   static int velocitytoservo;
-  velocitytoservo = 90 - velocity*30;
-  if(direct){
-    myservo1.write(velocitytoservo);
-    Serial.println("Servo1 speed:");
-    Serial.print(velocitytoservo);
-  }
+  velocitytoservo = 90 - velocity*5;
   if(!direct){
+    myservo1.write(velocitytoservo);
+    Serial.print("Servo1 speed:");
+    Serial.println(velocitytoservo);
+  }
+  if(direct){
     velocitytoservo = 180 - velocitytoservo;
     myservo1.write(velocitytoservo);
-    Serial.println("Servo1 speed:");
-    Serial.print(velocitytoservo);
+    Serial.print("Servo1 speed:");
+    Serial.println(velocitytoservo);
   }
 }
 // servo stop
@@ -53,18 +54,30 @@ void servo2cont(bool direct, int velocity){
   velocitytoservo = 90 - velocity*30;
   if(direct){
     myservo2.write(80);
-    Serial.println("Servo2 speed:");
-    Serial.print(velocitytoservo);
+    //Serial.println("Servo2 speed:");
+    //Serial.print(velocitytoservo);
   }
   if(!direct){
     velocitytoservo = 180 - velocitytoservo;
-    myservo2.write(100);
-    Serial.println("Servo2 speed:");
-    Serial.print(velocitytoservo);
+    myservo2.write(110);
+    //Serial.println("Servo2 speed:");
+    //Serial.print(velocitytoservo);
   }
 }
 
 // servo stop
 void servo2stop(){
   myservo2.write(90);
+}
+
+void servo1pos(int destination_position, int current_position){
+  if(current_position == destination_position){
+    servo1stop();
+  }
+  if(current_position > destination_position){
+    servo1cont(false, 12);
+  }
+  if(current_position < destination_position){
+    servo1cont(true, 12);
+  }
 }
