@@ -100,3 +100,48 @@ void rightwheelPulse(){
   else counterright--;
  
 }
+
+void servoinitRPM2(){
+  pinMode(servoencoderA,INPUT);
+  pinMode(servoencoderB,INPUT);
+  first_stateA=digitalRead(servoencoderA);
+  first_stateB=digitalRead(servoencoderB);
+  //Serial.begin(115200);
+}
+
+void servowheelPulse2(){
+  
+  current_stateA = digitalRead(servoencoderA);
+  current_stateB = digitalRead(servoencoderB);
+  
+  if (current_stateA != first_stateA){
+    if(current_stateB != current_stateA){
+      counterservo++;
+    }
+    else{
+      counterservo--;
+    }
+    first_stateA = current_stateA; 
+  }
+   
+  if (current_stateB != first_stateB){
+    if(digitalRead(servoencoderA) != current_stateB){
+      counterservo--;
+    }
+    else{
+      counterservo++;
+    }       
+    first_stateB = current_stateB;
+  }
+  
+          //Serial.print("Position:");
+          //Serial.println(counter);
+          /*
+          Serial.print("encA:");
+          Serial.println(digitalRead(inputA));
+          Serial.print("encB:");
+          Serial.println(digitalRead(inputB));
+          */
+    //Serial.print("test");
+    delayMicroseconds(50);
+}
