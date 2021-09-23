@@ -45,6 +45,9 @@ const byte leftencoderB = 16;
 const byte rightencoderA = 2;
 const byte rightencoderB = 15;
 
+const byte servoencoderA = 23;
+const byte servoencoderB = 22;
+
 const byte ML_A = 33;
 const byte ML_B = 32;
 const byte MR_A = 25;
@@ -62,25 +65,21 @@ static int velocitymotor;
 
 byte encAlastleft;
 bool dirleft;
-// variables for RPM
-//static unsigned long now, lastTime, lastTime2;
 int counterleft;
-//int currentPos, lastPos;
-//long RPM;
-
 byte encAlastright;
 bool dirright;
-// variables for RPM
-//static unsigned long now, lastTime, lastTime2;
 int counterright;
-//int currentPos, lastPos;
-//long RPM;
+byte encAlastservo;
+bool dirservo;
+int counterservo;
 
 // variables for controlled motor
 bool flagdirectright;
 bool flagdirectleft;
 bool rightact;
 bool leftact;
+int servoact;
+bool servomode;
 // left motor PID variables
 
 double leftsetpoint, leftinput, leftoutput;
@@ -103,6 +102,10 @@ bool flagspeed;
 bool toggle;
 //bool flagtoggle;
 
+int first_stateA, current_stateA;
+int first_stateB, current_stateB;
+int stateA, stateB;
+
 void onConnect(){
     Serial.println("Connected.");
 }
@@ -120,11 +123,16 @@ void setup()
     initservo();
     rightinitRPM();
     leftinitRPM();
+    //servoinitRPM();
+    servoinitRPM2();
     rightact = false;
     leftact = false;
     velocitymotor = 100;
     toggle = false;
     //flagtoggle=0;
+    counterservo = 15;
+    servoact = 4;
+    servomode = true;
 }
 
 void loop()
@@ -138,12 +146,17 @@ void loop()
     ctrl_motorleft(velocitymotor);
     //speedMode(toggle, 100, 300);
     Speedhaha(toggle, 100, 300);
-    
-    if(millis()-past>=1000){
-      Serial.print("speed: ");
-      Serial.println(velocitymotor);
-      //Serial.print("left: ");
-      //Serial.println(leftinput);
+    servowheelPulse2();
+    /*
+    if(millis()-past>=10){
+      
+      Serial.print("servoact: ");
+      Serial.print(servoact);
+      Serial.print(" servomode: ");
+      Serial.print(servomode);
+      Serial.print(" poosition: ");
+      Serial.println(counterservo);
       past=millis();
     }
+    */
 }
